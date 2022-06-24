@@ -9,7 +9,7 @@
     <version>0.1</version>
     <packaging>jar</packaging>
 
-
+    <name>melodia-composer-azf</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,16 @@
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <start-class>com.javi.uned.melodiacomposerazf.Main</start-class>
     </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.azure.functions/azure-functions-java-library -->
+        <dependency>
+            <groupId>com.microsoft.azure.functions</groupId>
+            <artifactId>azure-functions-java-library</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
