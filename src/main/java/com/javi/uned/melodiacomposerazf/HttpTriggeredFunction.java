@@ -7,19 +7,32 @@ import com.microsoft.azure.functions.annotation.HttpTrigger;
 
 import java.util.Optional;
 
-public class Function {
+public class HttpTriggeredFunction {
 
     @FunctionName("melodia-composer-azf")
     public HttpResponseMessage run(
             @HttpTrigger(
                     name = "req",
                     methods = {HttpMethod.GET},
-                    authLevel = AuthorizationLevel.ANONYMOUS
+                    authLevel = AuthorizationLevel.FUNCTION
             ) HttpRequestMessage<Optional<String>> request, final ExecutionContext context) {
 
         context.getLogger().info("Java HTTP trigger processed a request.");
 
-        return request.createResponseBuilder(HttpStatus.OK).body("Hello from Java Azure Functions!").build();
+        String body = "";
+
+        if (request.getBody().isPresent()) {
+            body = request.getBody().get();
+            context.getLogger().info("Request body: " + body);
+        }
+
+        // Build response
+        HttpResponseMessage responseMessage = request
+                .createResponseBuilder(HttpStatus.OK)
+                .body("Hello, HTTP triggered function processed a request.\nBody: " + body)
+                .build();
+
+        return responseMessage;
     }
 
 }
