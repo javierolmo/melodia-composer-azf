@@ -1,7 +1,7 @@
-package com.javi.uned.melodiacomposerazf.adapters.blobstorage;
+package com.javi.uned.melodiacomposerazf.services;
 
+import com.javi.uned.melodiacomposerazf.domain.MelodiaContainers;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
-import com.javi.uned.melodiacomposerazf.ports.Storage;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
@@ -15,16 +15,17 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.logging.Logger;
 
-public class BlobStorageAdapter implements Storage {
+public class BlobStorageService {
 
-    private static final Logger log = Logger.getLogger(BlobStorageAdapter.class.getName());
+    private static final Logger log = Logger.getLogger(BlobStorageService.class.getName());
 
     private CloudBlobClient blobClient;
     private CloudBlobContainer container;
 
-    public BlobStorageAdapter(String storageConnectionString, MelodiaContainers containerRef) throws BlobStorageException {
+    public BlobStorageService(MelodiaContainers containerRef) throws BlobStorageException {
         try {
-            CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
+            String blobStorageConnectionString = System.getenv("BLOB_STORAGE_CONNECTION_STRING");
+            CloudStorageAccount storageAccount = CloudStorageAccount.parse(blobStorageConnectionString);
             blobClient = storageAccount.createCloudBlobClient();
             container = blobClient.getContainerReference(containerRef.getContainerName());
             container.createIfNotExists();
