@@ -24,7 +24,7 @@ public class BlobStorageService {
 
     public BlobStorageService(MelodiaContainers containerRef) throws BlobStorageException {
         try {
-            String blobStorageConnectionString = System.getenv("BLOB_STORAGE_CONNECTION_STRING");
+            String blobStorageConnectionString = System.getenv("BLOB_CONNECTION_STRING");
             CloudStorageAccount storageAccount = CloudStorageAccount.parse(blobStorageConnectionString);
             blobClient = storageAccount.createCloudBlobClient();
             container = blobClient.getContainerReference(containerRef.getContainerName());
