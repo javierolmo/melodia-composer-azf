@@ -40,7 +40,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Javi</name>
-            <url>https://maven.pkg.github.com/javierolmo/pfg-core</url>
+            <url>https://maven.pkg.github.com/javierolmo/melodia-core</url>
             <snapshots><enabled>true</enabled></snapshots>
             <releases><enabled>true</enabled></releases>
         </repository>
