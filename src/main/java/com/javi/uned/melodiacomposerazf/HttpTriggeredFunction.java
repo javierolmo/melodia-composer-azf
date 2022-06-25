@@ -18,9 +18,9 @@ import java.util.Optional;
 
 public class HttpTriggeredFunction {
 
-    @FunctionName("melodia-composer-azf")
+    @FunctionName("compose")
     public HttpResponseMessage run(
-            @HttpTrigger(name = "req",methods = {HttpMethod.GET},authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(name = "req",methods = {HttpMethod.POST},authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context
     ) throws IOException, BlobStorageException {
 
@@ -47,6 +47,21 @@ public class HttpTriggeredFunction {
         HttpResponseMessage responseMessage = request
                 .createResponseBuilder(HttpStatus.OK)
                 .body("Hello, HTTP triggered function processed a request.")
+                .build();
+
+        return responseMessage;
+    }
+
+    @FunctionName("env")
+    public HttpResponseMessage env(
+            @HttpTrigger(name = "req",methods = {HttpMethod.GET},authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
+            final ExecutionContext context
+    ) throws IOException, BlobStorageException {
+
+        // Build response
+        HttpResponseMessage responseMessage = request
+                .createResponseBuilder(HttpStatus.OK)
+                .body(System.getenv())
                 .build();
 
         return responseMessage;
