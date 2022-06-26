@@ -35,6 +35,7 @@ jobs:
       - name: 'Restore Project Dependencies Using Mvn'
         shell: bash
         run: |
+          npm i -g azure-functions-core-tools@4 --unsafe-perm true
           pushd './${{ env.POM_XML_DIRECTORY }}'
           mvn clean package
           popd
