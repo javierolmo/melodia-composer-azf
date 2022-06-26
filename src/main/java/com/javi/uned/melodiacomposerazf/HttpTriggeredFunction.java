@@ -95,7 +95,7 @@ public class HttpTriggeredFunction {
     @FunctionName("orchestrator")
     public String runorchestrator(@DurableOrchestrationTrigger(name = "runtimeState") String runtimeState) {
         return OrchestrationRunner.loadAndRun(runtimeState, ctx -> {
-            return ctx.callActivity("SayHello", "Tokyo", String.class).await();
+            return ctx.callActivity("long", "Tokyo", String.class).await();
         });
     }
 
