@@ -1,5 +1,7 @@
 package com.javi.uned.melodiacomposerazf;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.uned.melodiacomposerazf.domain.MelodiaContainers;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
@@ -20,32 +22,63 @@ import com.microsoft.durabletask.azurefunctions.DurableClientContext;
 import com.microsoft.durabletask.azurefunctions.DurableClientInput;
 import com.microsoft.durabletask.azurefunctions.DurableOrchestrationTrigger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
 public class HttpTriggeredFunction {
 
-    @FunctionName("compose")
-    public HttpResponseMessage run(
-            @HttpTrigger(name = "req",methods = {HttpMethod.POST},authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
+    @FunctionName("composition-request")
+    public HttpResponseMessage runshort(
+            @HttpTrigger(name = "req", methods = {HttpMethod.POST}) HttpRequestMessage<Optional<String>> req,
+            @DurableClientInput(name = "durableContext") DurableClientContext durableClientContext,
             final ExecutionContext context
-    ) throws IOException, BlobStorageException {
+    ) {
+        try {
 
-        context.getLogger().info("Java HTTP trigger processed a request.");
+            context.getLogger().info("Java HTTP trigger processed a request.");
 
-        // Parse body to specs
-        String body = request.getBody().orElseThrow(() -> new RuntimeException("No body"));
-        ObjectMapper objectMapper = new ObjectMapper();
-        ScoreSpecs specs = objectMapper.readValue(body, ScoreSpecs.class);
+            // Parse body to specs
+            String body = req.getBody().orElseThrow(() -> new RuntimeException("No body"));
+            ObjectMapper objectMapper = new ObjectMapper();
+            ScoreSpecs specs = objectMapper.readValue(body, ScoreSpecs.class);
 
-        // Insert sheet in database
-        //SheetDAO sheetDAO = new SheetDAO();
-        //SheetEntity sheet = new SheetEntity();
-        //long sheetId = sheetDAO.insert(specs, context.getLogger());
+            // Insert sheet in database
+            //SheetDAO sheetDAO = new SheetDAO();
+            //SheetEntity sheet = new SheetEntity();
+            //long sheetId = sheetDAO.insert(specs, context.getLogger());
 
-        // Save specs in blob storage
+            // Save specs in blob storage
+            BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
+            File file = new File("specs.json");
+            objectMapper.writeValue(file, specs);
+            blobStorageService.storeFile(file.getAbsolutePath(), String.format("specs/%s.json", specs.getRequesterId()));
+
+            // Successful response
+            DurableTaskClient client = durableClientContext.getClient();
+            String instanceId = client.scheduleNewOrchestrationInstance("orchestrator");
+            return durableClientContext.createCheckStatusResponse(req, instanceId);
+
+        } catch (JsonProcessingException e) {
+            return req.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Invalid JSON").build();
+        } catch (Exception e) {
+            return req.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error").build();
+        }
+
+    }
+
+    @FunctionName("orchestrator")
+    public String runorchestrator(@DurableOrchestrationTrigger(name = "runtimeState") String runtimeState) {
+        return OrchestrationRunner.loadAndRun(runtimeState, ctx -> {
+            return ctx.callActivity("long", "Tokyo", String.class).await();
+        });
+    }
+
+    @FunctionName("long")
+    public String runlong(@DurableActivityTrigger(name = "name") String name) throws BlobStorageException {
+
+        // Create blob storage service
         BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
-        //String specsBlobName = blobStorageService.saveSpecs(specs);
 
         // Compose a random melodia
         ComposerService composerService = new ComposerService();
@@ -57,58 +90,6 @@ public class HttpTriggeredFunction {
             e.printStackTrace();
         }
 
-        // Build response
-        HttpResponseMessage responseMessage = request
-                .createResponseBuilder(HttpStatus.OK)
-                .body("Hello, HTTP triggered function processed a request.")
-                .build();
-
-        return responseMessage;
-    }
-
-    @FunctionName("env")
-    public HttpResponseMessage env(
-            @HttpTrigger(name = "req",methods = {HttpMethod.GET},authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request,
-            final ExecutionContext context
-    ) throws IOException, BlobStorageException {
-
-        // Build response
-        HttpResponseMessage responseMessage = request
-                .createResponseBuilder(HttpStatus.OK)
-                .body(System.getenv())
-                .build();
-
-        return responseMessage;
-    }
-
-    @FunctionName("short")
-    public HttpResponseMessage runshort(
-            @HttpTrigger(name = "req", methods = {HttpMethod.POST}) HttpRequestMessage<Optional<String>> req,
-            @DurableClientInput(name = "durableContext") DurableClientContext durableClientContext,
-            final ExecutionContext context
-    ) {
-        DurableTaskClient client = durableClientContext.getClient();
-        String instanceId = client.scheduleNewOrchestrationInstance("orchestrator");
-        return durableClientContext.createCheckStatusResponse(req, instanceId);
-    }
-
-    @FunctionName("orchestrator")
-    public String runorchestrator(@DurableOrchestrationTrigger(name = "runtimeState") String runtimeState) {
-        return OrchestrationRunner.loadAndRun(runtimeState, ctx -> {
-            return ctx.callActivity("long", "Tokyo", String.class).await();
-        });
-    }
-
-    @FunctionName("long")
-    public String runlong(@DurableActivityTrigger(name = "name") String name) {
-        for (int i = 0; i < 60; i++) {
-            System.out.println(name);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         return name;
     }
 
