@@ -83,13 +83,13 @@ public class HttpTriggeredFunction {
 
     @FunctionName("short")
     public HttpResponseMessage runshort(
-            @HttpTrigger(name = "req") HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(name = "req", methods = {HttpMethod.POST}) HttpRequestMessage<Optional<String>> req,
             @DurableClientInput(name = "durableContext") DurableClientContext durableClientContext,
             final ExecutionContext context
     ) {
         DurableTaskClient client = durableClientContext.getClient();
         String instanceId = client.scheduleNewOrchestrationInstance("orchestrator");
-        return durableClientContext.createCheckStatusResponse(request, instanceId);
+        return durableClientContext.createCheckStatusResponse(req, instanceId);
     }
 
     @FunctionName("orchestrator")
