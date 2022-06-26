@@ -13,6 +13,13 @@ import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.microsoft.durabletask.DurableTaskClient;
+import com.microsoft.durabletask.OrchestrationRunner;
+import com.microsoft.durabletask.azurefunctions.DurableActivityTrigger;
+import com.microsoft.durabletask.azurefunctions.DurableClientContext;
+import com.microsoft.durabletask.azurefunctions.DurableClientInput;
+import com.microsoft.durabletask.azurefunctions.DurableOrchestrationTrigger;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -74,15 +81,35 @@ public class HttpTriggeredFunction {
         return responseMessage;
     }
 
-    /*
-    @FunctionName("eventGrid")
-    public void runblob(
-            @EventGridTrigger(name = "event") ScoreSpecs scoreSpecs,
+    @FunctionName("short")
+    public HttpResponseMessage runshort(
+            @HttpTrigger(name = "req") HttpRequestMessage<Optional<String>> request,
+            @DurableClientInput(name = "durableContext") DurableClientContext durableClientContext,
             final ExecutionContext context
     ) {
-        context.getLogger().info("Java EventGrid trigger processed a request.");
-        context.getLogger().info(scoreSpecs.toString());
+        DurableTaskClient client = durableClientContext.getClient();
+        String instanceId = client.scheduleNewOrchestrationInstance("orchestrator");
+        return durableClientContext.createCheckStatusResponse(request, instanceId);
     }
-     */
+
+    @FunctionName("orchestrator")
+    public String runorchestrator(@DurableOrchestrationTrigger(name = "runtimeState") String runtimeState) {
+        return OrchestrationRunner.loadAndRun(runtimeState, ctx -> {
+            return ctx.callActivity("SayHello", "Tokyo", String.class).await();
+        });
+    }
+
+    @FunctionName("long")
+    public String runlong(@DurableActivityTrigger(name = "name") String name) {
+        for (int i = 0; i < 60; i++) {
+            System.out.println(name);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }
