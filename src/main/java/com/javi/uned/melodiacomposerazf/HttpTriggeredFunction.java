@@ -75,6 +75,7 @@ public class HttpTriggeredFunction {
         return responseMessage;
     }
 
+    /*
     @FunctionName("eventGrid")
     public void runblob(
             @EventGridTrigger(name = "event") ScoreSpecs scoreSpecs,
@@ -83,5 +84,6 @@ public class HttpTriggeredFunction {
         context.getLogger().info("Java EventGrid trigger processed a request.");
         context.getLogger().info(scoreSpecs.toString());
     }
+     */
 
 }
