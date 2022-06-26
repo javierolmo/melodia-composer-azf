@@ -39,9 +39,11 @@ public class HttpTriggeredFunction {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
             // Parse body to specs
+            context.getLogger().info("Parsing body to specs");
             String body = req.getBody().orElseThrow(() -> new RuntimeException("No body"));
             ObjectMapper objectMapper = new ObjectMapper();
             ScoreSpecs specs = objectMapper.readValue(body, ScoreSpecs.class);
+            context.getLogger().info("Score specs parsed successfully: " + specs);
 
             // Insert sheet in database
             //SheetDAO sheetDAO = new SheetDAO();
@@ -49,10 +51,12 @@ public class HttpTriggeredFunction {
             //long sheetId = sheetDAO.insert(specs, context.getLogger());
 
             // Save specs in blob storage
+            context.getLogger().info("Saving specs in blob storage");
             BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
             File file = new File("specs.json");
             objectMapper.writeValue(file, specs);
             blobStorageService.storeFile(file.getAbsolutePath(), String.format("specs/%s.json", specs.getRequesterId()));
+            context.getLogger().info("Specs saved in blob storage");
 
             // Successful response
             DurableTaskClient client = durableClientContext.getClient();
