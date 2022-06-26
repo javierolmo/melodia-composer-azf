@@ -109,6 +109,7 @@ public class HttpTriggeredFunction {
                 e.printStackTrace();
             }
         }
+        return name;
     }
 
 
