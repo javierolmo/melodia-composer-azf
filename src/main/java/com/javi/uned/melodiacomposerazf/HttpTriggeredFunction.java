@@ -11,7 +11,6 @@ import com.javi.uned.melodiacore.model.MelodiaScore;
 import com.javi.uned.melodiacore.model.specs.ScoreSpecs;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
-import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import java.io.IOException;
