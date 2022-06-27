@@ -10,12 +10,12 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<SpecsDTO> specsEvent,
+            @EventGridTrigger(name = "specs") Event<String> specsEvent,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Specs JSON: " + specsEvent);
+        executionContext.getLogger().info("Request ID: " + specsEvent.getData());
 
-        return specsEvent.getData().toString();
+        return specsEvent.getData();
     }
 }
