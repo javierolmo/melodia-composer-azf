@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.uned.melodiacomposerazf.domain.MelodiaContainers;
+import com.javi.uned.melodiacomposerazf.domain.SpecsDTO;
+import com.javi.uned.melodiacomposerazf.domain.SpecsDTOTransformer;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
 import com.javi.uned.melodiacomposerazf.services.ComposerService;
@@ -42,8 +44,9 @@ public class HttpTriggeredFunction {
             context.getLogger().info("Parsing body to specs");
             String body = req.getBody().orElseThrow(() -> new RuntimeException("No body"));
             ObjectMapper objectMapper = new ObjectMapper();
-            ScoreSpecs specs = objectMapper.readValue(body, ScoreSpecs.class);
-            context.getLogger().info("Score specs parsed successfully: " + specs);
+            SpecsDTO specsDto = objectMapper.readValue(body, SpecsDTO.class);
+            ScoreSpecs specs = SpecsDTOTransformer.toDomainObject(specsDto);
+            context.getLogger().info("Score specs parsed successfully: " + specsDto);
 
             // Insert sheet in database
             //SheetDAO sheetDAO = new SheetDAO();
