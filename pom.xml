@@ -151,6 +151,27 @@
             <version>2.13.3</version>
         </dependency>
 
+        <!-- Azure Event Grid -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventgrid</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <!-- Azure Core -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-core</artifactId>
+            <version>1.29.1</version>
+        </dependency>
+
+        <!-- Azure Core Serializer JSON Jackson -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-core-serializer-json-jackson</artifactId>
+            <version>1.2.18</version>
+        </dependency>
+
 
     </dependencies>
 
