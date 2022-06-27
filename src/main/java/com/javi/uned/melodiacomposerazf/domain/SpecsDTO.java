@@ -4,6 +4,7 @@ import com.javi.uned.melodiacore.model.Compas;
 import com.javi.uned.melodiacore.model.Figura;
 import com.javi.uned.melodiacore.model.Instrumento;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SpecsDTO {
@@ -105,5 +106,22 @@ public class SpecsDTO {
 
     public void setMaxFigura(Figura maxFigura) {
         this.maxFigura = maxFigura;
+    }
+
+    @Override
+    public String toString() {
+        return "SpecsDTO{" +
+                "requesterId=" + requesterId +
+                ", movementTitle='" + movementTitle + '\'' +
+                ", movementNumber='" + movementNumber + '\'' +
+                ", authors=" + authors +
+                ", measures=" + measures +
+                ", compas=" + compas +
+                ", instrumentos=" + Arrays.toString(instrumentos) +
+                ", tonalidad=" + tonalidad +
+                ", phraseLength=" + phraseLength +
+                ", minFigura=" + minFigura +
+                ", maxFigura=" + maxFigura +
+                '}';
     }
 }

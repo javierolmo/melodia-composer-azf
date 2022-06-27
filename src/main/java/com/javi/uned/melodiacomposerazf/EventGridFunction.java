@@ -8,11 +8,12 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 public class EventGridFunction {
 
     @FunctionName("eventGrid")
-    public void event(
+    public String event(
             @EventGridTrigger(name = "specs") SpecsDTO specsDTO,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
         executionContext.getLogger().info("SpecsDTO: " + specsDTO.toString());
+        return specsDTO.toString();
     }
 }
