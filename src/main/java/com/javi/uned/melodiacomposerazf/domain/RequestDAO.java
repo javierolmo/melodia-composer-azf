@@ -9,25 +9,25 @@ public class RequestDAO {
     private static final Logger log = Logger.getLogger(RequestDAO.class.getName());
     private static final String connectionString = System.getenv("DATABASE_CONNECTION_STRING");
 
-    public Optional<RequestEntity> update(RequestEntity requestEntity) {
+    public Optional<Request> update(Request request) {
         String query = "UPDATE dbo.sheets SET azf_code = ?, end_date_time = ?, specs = ?, start_date_time = ?, user_id = ?, status = ? WHERE id = ?;";
-        log.info("Update database request with id " + requestEntity.getId());
-        log.info("New value: " + requestEntity);
+        log.info("Update database request with id " + request.getId());
+        log.info("New value: " + request);
 
         try (
                 Connection connection = DriverManager.getConnection(connectionString);
                 PreparedStatement updateStatement = connection.prepareStatement(query);
         ){
 
-            updateStatement.setString(1, requestEntity.getAzfCode());
-            updateStatement.setTimestamp(2, Timestamp.valueOf(requestEntity.getEndDateTime()));
-            updateStatement.setString(3, requestEntity.getSpecs());
-            updateStatement.setTimestamp(4, Timestamp.valueOf(requestEntity.getStartDateTime()));
-            updateStatement.setLong(5, requestEntity.getUserId());
-            updateStatement.setString(6, requestEntity.getStatus());
-            updateStatement.setLong(7, requestEntity.getId());
+            updateStatement.setString(1, request.getAzfCode());
+            updateStatement.setTimestamp(2, Timestamp.valueOf(request.getEndDateTime()));
+            updateStatement.setString(3, request.getSpecs());
+            updateStatement.setTimestamp(4, Timestamp.valueOf(request.getStartDateTime()));
+            updateStatement.setLong(5, request.getUserId());
+            updateStatement.setString(6, request.getStatus());
+            updateStatement.setLong(7, request.getId());
             updateStatement.executeUpdate();
-            return selectById(requestEntity.getId());
+            return selectById(request.getId());
 
         } catch (SQLException e) {
             log.severe("Error updating data: " + e.getMessage());
@@ -35,7 +35,7 @@ public class RequestDAO {
         }
     }
 
-    public Optional<RequestEntity> selectById(long id) throws SQLException {
+    public Optional<Request> selectById(long id) throws SQLException {
 
         String query = "SELECT * FROM dbo.requests WHERE id = ?;";
         log.info("Select data");
@@ -47,15 +47,15 @@ public class RequestDAO {
             selectStatement.setLong(1, id);
             ResultSet rs = selectStatement.executeQuery();
             if (rs.next()) {
-                RequestEntity requestEntity = new RequestEntity();
-                requestEntity.setId(rs.getLong("id"));
-                requestEntity.setAzfCode(rs.getString("azf_code"));
-                requestEntity.setEndDateTime(rs.getTimestamp("end_date_time").toLocalDateTime());
-                requestEntity.setSpecs(rs.getString("specs"));
-                requestEntity.setStartDateTime(rs.getTimestamp("start_date_time").toLocalDateTime());
-                requestEntity.setUserId(rs.getLong("user_id"));
-                requestEntity.setStatus(rs.getString("status"));
-                return Optional.of(requestEntity);
+                Request request = new Request();
+                request.setId(rs.getLong("id"));
+                request.setAzfCode(rs.getString("azf_code"));
+                request.setEndDateTime(rs.getTimestamp("end_date_time").toLocalDateTime());
+                request.setSpecs(rs.getString("specs"));
+                request.setStartDateTime(rs.getTimestamp("start_date_time").toLocalDateTime());
+                request.setUserId(rs.getLong("user_id"));
+                request.setStatus(rs.getString("status"));
+                return Optional.of(request);
             } else {
                 return Optional.empty();
             }

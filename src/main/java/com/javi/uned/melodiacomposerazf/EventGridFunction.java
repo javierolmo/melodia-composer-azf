@@ -22,20 +22,18 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<RequestEntity> requestEvent,
+            @EventGridTrigger(name = "specs") Request request,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Event: " + requestEvent);
-        executionContext.getLogger().info("Request Entity: " + requestEvent.getData());
+        executionContext.getLogger().info("Request: " + request);
 
         try {
 
             // Read score specs from event grid
-            ObjectMapper objectMapper = new ObjectMapper();
-            RequestEntity requestEntity = requestEvent.getData();
             executionContext.getLogger().info("Hasta aquí todo OK");
-            ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(request.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
             // Create sheet and insert into database

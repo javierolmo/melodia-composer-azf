@@ -3,7 +3,7 @@ package com.javi.uned.melodiacomposerazf.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class RequestEntity implements Serializable {
+public class Request implements Serializable {
 
     private long id;
     private long userId;
