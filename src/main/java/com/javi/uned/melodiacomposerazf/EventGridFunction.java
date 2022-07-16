@@ -23,7 +23,7 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<String> requestEvent,
+            @EventGridTrigger(name = "specs") Event requestEvent,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
@@ -32,13 +32,9 @@ public class EventGridFunction {
 
         try {
 
-            // Read request entity from database
-            RequestDAO requestDAO = new RequestDAO();
-            RequestEntity requestEntity = requestDAO.selectById(Long.parseLong(requestEvent.getData()))
-                    .orElseThrow(() -> new IllegalArgumentException("Request not found"));
-
             // Read score specs from event grid
             ObjectMapper objectMapper = new ObjectMapper();
+            RequestEntity requestEntity = (RequestEntity) requestEvent.getData();
             ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
