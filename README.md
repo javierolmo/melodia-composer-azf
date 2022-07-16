@@ -5,9 +5,8 @@ environment variables:
 
 For local executions, configure Azure Key Vault
 ```
-KEY_VAULT_NAME: name of key vault
-KEY_VAULT_CLIENT_ID: client id of key vault
-KEY_VAULT_CLIENT_SECRET: client secret of key vault
+DATABASE_CONNECTION_STRING
+BLOB_CONNECTION_STRING
 ```
 
 ![img.png](img.png)

@@ -76,4 +76,18 @@ public class SheetEntity {
     public void setXmlPath(String xmlPath) {
         this.xmlPath = xmlPath;
     }
+
+    @Override
+    public String toString() {
+        return "SheetEntity{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", finished=" + finished +
+                ", name='" + name + '\'' +
+                ", ownerId=" + ownerId +
+                ", pdfPath='" + pdfPath + '\'' +
+                ", specsPath='" + specsPath + '\'' +
+                ", xmlPath='" + xmlPath + '\'' +
+                '}';
+    }
 }
