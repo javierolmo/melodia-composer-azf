@@ -30,7 +30,8 @@ public class EventGridFunction {
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Request event: " + requestEvent);
+        executionContext.getLogger().info("Event: " + requestEvent);
+        executionContext.getLogger().info("Request Entity: " + requestEvent.getData());
 
         try {
 
