@@ -59,6 +59,8 @@ public class EventGridFunction {
             BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
             blobStorageService.storeFile("generated.musicxml", destinationPath);
 
+            return sheetEntity.toString();
+
         } catch (JsonProcessingException e) {
             executionContext.getLogger().severe("Error processing JSON: " + e.getMessage());
             throw new RuntimeException(e);
@@ -73,6 +75,5 @@ public class EventGridFunction {
             throw new RuntimeException(e);
         }
 
-        return specsEvent.getData();
     }
 }
