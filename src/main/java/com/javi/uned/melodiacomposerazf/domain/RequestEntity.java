@@ -1,11 +1,12 @@
 package com.javi.uned.melodiacomposerazf.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class RequestEntity {
+public class RequestEntity implements Serializable {
 
-    private Long id;
-    private Long userId;
+    private long id;
+    private long userId;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String azfCode;
