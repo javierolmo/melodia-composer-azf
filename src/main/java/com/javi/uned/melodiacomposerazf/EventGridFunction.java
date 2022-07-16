@@ -15,7 +15,6 @@ import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -23,7 +22,7 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event requestEvent,
+            @EventGridTrigger(name = "specs") Event<RequestEntity> requestEvent,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
@@ -34,7 +33,8 @@ public class EventGridFunction {
 
             // Read score specs from event grid
             ObjectMapper objectMapper = new ObjectMapper();
-            RequestEntity requestEntity = (RequestEntity) requestEvent.getData();
+            RequestEntity requestEntity = requestEvent.getData();
+            executionContext.getLogger().info("Hasta aquí todo OK");
             ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
@@ -70,6 +70,9 @@ public class EventGridFunction {
         } catch (SQLException e) {
             executionContext.getLogger().severe("Error inserting sheet in database: " + e.getMessage());
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            executionContext.getLogger().severe("Error: " + e.getStackTrace());
+            throw e;
         }
 
     }

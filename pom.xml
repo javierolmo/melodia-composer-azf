@@ -125,7 +125,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.jenetics/jenetics -->
+        <!-- Jenetics -->
         <dependency>
             <groupId>io.jenetics</groupId>
             <artifactId>jenetics</artifactId>
