@@ -26,19 +26,18 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<RequestEntity> specsEvent,
+            @EventGridTrigger(name = "specs") Event<RequestEntity> requestEvent,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Request ID: " + specsEvent.getData());
-
-        ComposerService composerService = new ComposerService();
+        executionContext.getLogger().info("Request event: " + requestEvent);
+        RequestEntity requestEntity = requestEvent.getData();
+        executionContext.getLogger().info("Request entity: " + requestEntity);
 
         try {
 
             // Read score specs from event grid
             ObjectMapper objectMapper = new ObjectMapper();
-            RequestEntity requestEntity = specsEvent.getData();
             ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
@@ -51,6 +50,7 @@ public class EventGridFunction {
             int sheetId = sheetDAO.insert(sheetEntity);
 
             // Compose score and save it to a file
+            ComposerService composerService = new ComposerService();
             MelodiaScore melodiaScore = composerService.composeRandom();
             MelodiaExporter.toXML(melodiaScore, "generated.musicxml");
 
