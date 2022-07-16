@@ -3,6 +3,7 @@ package com.javi.uned.melodiacomposerazf;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.uned.melodiacomposerazf.domain.MelodiaContainers;
+import com.javi.uned.melodiacomposerazf.domain.RequestEntity;
 import com.javi.uned.melodiacomposerazf.domain.SheetDAO;
 import com.javi.uned.melodiacomposerazf.domain.SheetEntity;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
@@ -25,7 +26,7 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<String> specsEvent,
+            @EventGridTrigger(name = "specs") Event<RequestEntity> specsEvent,
             final ExecutionContext executionContext
     ) {
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
@@ -35,10 +36,13 @@ public class EventGridFunction {
 
         try {
 
+            // Read score specs from event grid
             ObjectMapper objectMapper = new ObjectMapper();
-            ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(specsEvent.getData(), ScoreSpecsDTO.class);
+            RequestEntity requestEntity = specsEvent.getData();
+            ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
+            // Create sheet and insert into database
             SheetDAO sheetDAO = new SheetDAO();
             SheetEntity sheetEntity = new SheetEntity();
             sheetEntity.setDate(LocalDateTime.now().toString());
@@ -46,9 +50,11 @@ public class EventGridFunction {
             sheetEntity.setOwnerId(scoreSpecs.getRequesterId());
             int sheetId = sheetDAO.insert(sheetEntity);
 
+            // Compose score and save it to a file
             MelodiaScore melodiaScore = composerService.composeRandom();
             MelodiaExporter.toXML(melodiaScore, "generated.musicxml");
 
+            // Upload score to blob storage
             String destinationPath = String.format("%s/%s.musicxml", sheetId, sheetId);
             BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
             blobStorageService.storeFile("generated.musicxml", destinationPath);
