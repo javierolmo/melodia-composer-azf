@@ -2,10 +2,7 @@ package com.javi.uned.melodiacomposerazf;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javi.uned.melodiacomposerazf.domain.MelodiaContainers;
-import com.javi.uned.melodiacomposerazf.domain.RequestEntity;
-import com.javi.uned.melodiacomposerazf.domain.SheetDAO;
-import com.javi.uned.melodiacomposerazf.domain.SheetEntity;
+import com.javi.uned.melodiacomposerazf.domain.*;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
 import com.javi.uned.melodiacomposerazf.services.ComposerService;
@@ -35,9 +32,13 @@ public class EventGridFunction {
 
         try {
 
+            // Read request entity from database
+            RequestDAO requestDAO = new RequestDAO();
+            RequestEntity requestEntity = requestDAO.selectById(Long.parseLong(requestEvent.getData()))
+                    .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
             // Read score specs from event grid
             ObjectMapper objectMapper = new ObjectMapper();
-            RequestEntity requestEntity = objectMapper.readValue(requestEvent.getData(), RequestEntity.class);
             ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(requestEntity.getSpecs(), ScoreSpecsDTO.class);
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
 
