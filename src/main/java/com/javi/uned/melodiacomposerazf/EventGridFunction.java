@@ -15,9 +15,8 @@ import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
-
-import java.util.logging.Level;
-
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class EventGridFunction {
 
@@ -30,18 +29,11 @@ public class EventGridFunction {
         executionContext.getLogger().info("Event data: " + event);
         ScoreSpecsDTO scoreSpecsDTO = event.getData(ScoreSpecsDTO.class);
         executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTO);
-        return "OK";
 
-        /*
         try {
 
-            // Read score specs from event grid
-            executionContext.getLogger().info("Hasta aquí todo OK");
-            ObjectMapper objectMapper = new ObjectMapper();
-            ScoreSpecsDTO scoreSpecsDTO = objectMapper.readValue(request.getSpecs(), ScoreSpecsDTO.class);
-            ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
-
             // Create sheet and insert into database
+            ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
             SheetDAO sheetDAO = new SheetDAO();
             SheetEntity sheetEntity = new SheetEntity();
             sheetEntity.setDate(LocalDateTime.now().toString());
@@ -61,9 +53,6 @@ public class EventGridFunction {
 
             return sheetEntity.toString();
 
-        } catch (JsonProcessingException e) {
-            executionContext.getLogger().severe("Error processing JSON: " + e.getMessage());
-            throw new RuntimeException(e);
         } catch (ExportException e) {
             executionContext.getLogger().severe("Error exporting to XML: " + e.getMessage());
             throw new RuntimeException(e);
@@ -73,10 +62,6 @@ public class EventGridFunction {
         } catch (SQLException e) {
             executionContext.getLogger().severe("Error inserting sheet in database: " + e.getMessage());
             throw new RuntimeException(e);
-        } catch (Exception e) {
-            executionContext.getLogger().severe("Error: " + e.getStackTrace());
-            throw e;
         }
-        */
     }
 }
