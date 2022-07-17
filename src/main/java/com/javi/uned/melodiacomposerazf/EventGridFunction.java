@@ -17,6 +17,8 @@ import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.SQLException;
 
 public class EventGridFunction {
@@ -56,7 +58,7 @@ public class EventGridFunction {
             ComposerService composerService = new ComposerService();
             MelodiaScore melodiaScore = composerService.composeRandom();
             String sourcePath = "scores/generated.musicxml";
-            new File(sourcePath).delete();
+            Files.deleteIfExists(new File(sourcePath).toPath());
             MelodiaExporter.toXML(melodiaScore, sourcePath);
             executionContext.getLogger().info("Score composed successfuly.");
 
@@ -65,6 +67,7 @@ public class EventGridFunction {
             String destinationPath = String.format("%s/%s.musicxml", sheetEntity.getId(), sheetEntity.getId());
             BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
             blobStorageService.storeFile(sourcePath, destinationPath);
+            Files.deleteIfExists(new File(sourcePath).toPath());
             executionContext.getLogger().info("Score uploaded successfuly.");
 
             return sheetEntity.toString();
@@ -80,6 +83,9 @@ public class EventGridFunction {
             throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
             executionContext.getLogger().severe("Error deserializing specs: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            executionContext.getLogger().severe("Error reading/writing file: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
