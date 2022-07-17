@@ -16,6 +16,8 @@ import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 
+import java.util.logging.Level;
+
 
 public class EventGridFunction {
 
@@ -24,12 +26,17 @@ public class EventGridFunction {
             @EventGridTrigger(name = "specs") Event<ScoreSpecsDTO> event,
             final ExecutionContext executionContext
     ) {
+        try {
+            executionContext.getLogger().info("Java EventGrid trigger processed a request.");
+            executionContext.getLogger().info("Event: " + event);
+            ScoreSpecsDTO scoreSpecsDTO = event.getData();
+            executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTO);
+            return "OK";
+        } catch (Exception e) {
+            executionContext.getLogger().log(Level.SEVERE, "Error processing event", e);
+            return "ERROR";
+        }
 
-        executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Event: " + event);
-        ScoreSpecsDTO scoreSpecsDTO = event.getData();
-        executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTO);
-        return "OK";
 
         /*
         try {
