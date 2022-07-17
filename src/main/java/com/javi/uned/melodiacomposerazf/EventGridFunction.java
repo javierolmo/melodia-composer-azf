@@ -15,19 +15,23 @@ import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+
 
 public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Request request,
+            @EventGridTrigger(name = "specs") Event<ScoreSpecsDTO> event,
             final ExecutionContext executionContext
     ) {
-        executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Request: " + request);
 
+        executionContext.getLogger().info("Java EventGrid trigger processed a request.");
+        executionContext.getLogger().info("Event: " + event);
+        ScoreSpecsDTO scoreSpecsDTO = event.getData();
+        executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTO);
+        return "OK";
+
+        /*
         try {
 
             // Read score specs from event grid
@@ -72,6 +76,6 @@ public class EventGridFunction {
             executionContext.getLogger().severe("Error: " + e.getStackTrace());
             throw e;
         }
-
+        */
     }
 }
