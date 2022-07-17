@@ -42,7 +42,7 @@ public class EventGridFunction {
             // Get sheet object
             executionContext.getLogger().info("Getting sheet object...");
             SheetEntity sheetEntity;
-            if (request.getSheetId() < 0) {
+            if (request.getSheetId() == null) {
                 sheetEntity = databaseService.insertSheet(scoreSpecs.getMovementTitle(), scoreSpecs.getRequesterId());
             } else {
                 sheetEntity = databaseService.findSheetById(request.getSheetId());
