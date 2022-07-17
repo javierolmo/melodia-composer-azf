@@ -18,19 +18,19 @@ public class Request implements Serializable {
     private String status;
     private long sheetId;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -74,11 +74,11 @@ public class Request implements Serializable {
         this.status = status;
     }
 
-    public Long getSheetId() {
+    public long getSheetId() {
         return sheetId;
     }
 
-    public void setSheetId(Long sheetId) {
+    public void setSheetId(long sheetId) {
         this.sheetId = sheetId;
     }
 
