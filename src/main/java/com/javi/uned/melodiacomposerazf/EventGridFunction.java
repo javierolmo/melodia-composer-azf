@@ -15,6 +15,8 @@ import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
+
+import java.io.File;
 import java.sql.SQLException;
 
 public class EventGridFunction {
@@ -53,14 +55,16 @@ public class EventGridFunction {
             executionContext.getLogger().info("Composing score...");
             ComposerService composerService = new ComposerService();
             MelodiaScore melodiaScore = composerService.composeRandom();
-            MelodiaExporter.toXML(melodiaScore, "scores/generated.musicxml");
+            String sourcePath = "scores/generated.musicxml";
+            new File(sourcePath).delete();
+            MelodiaExporter.toXML(melodiaScore, sourcePath);
             executionContext.getLogger().info("Score composed successfuly.");
 
             // Upload score to blob storage
             executionContext.getLogger().info("Uploading score to blob storage...");
             String destinationPath = String.format("%s/%s.musicxml", sheetEntity.getId(), sheetEntity.getId());
             BlobStorageService blobStorageService = new BlobStorageService(MelodiaContainers.SHEETS);
-            blobStorageService.storeFile("scores/generated.musicxml", destinationPath);
+            blobStorageService.storeFile(sourcePath, destinationPath);
             executionContext.getLogger().info("Score uploaded successfuly.");
 
             return sheetEntity.toString();
