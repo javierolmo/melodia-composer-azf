@@ -13,4 +13,9 @@ public class ComposerService {
         ScoreSpecs scoreSpecs = ScoreSpecsBuilder.defaultBuilder().build();
         return melodiaRandom.randomScore(scoreSpecs);
     }
+
+    public MelodiaScore compose(ScoreSpecs scoreSpecs) {
+        MelodiaRandom melodiaRandom = new MelodiaRandom();
+        return melodiaRandom.randomScore(scoreSpecs);
+    }
 }

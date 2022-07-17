@@ -1,5 +1,9 @@
 package com.javi.uned.melodiacomposerazf.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -12,6 +16,7 @@ public class Request implements Serializable {
     private String azfCode;
     private String specs;
     private String status;
+    private long sheetId;
 
     public Long getId() {
         return id;
@@ -67,6 +72,18 @@ public class Request implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getSheetId() {
+        return sheetId;
+    }
+
+    public void setSheetId(Long sheetId) {
+        this.sheetId = sheetId;
+    }
+
+    public ScoreSpecsDTO scoreSpecsDTO () throws JsonProcessingException {
+        return new ObjectMapper().readValue(specs, ScoreSpecsDTO.class);
     }
 
 

@@ -10,7 +10,7 @@ public class RequestDAO {
     private static final String connectionString = System.getenv("DATABASE_CONNECTION_STRING");
 
     public Optional<Request> update(Request request) {
-        String query = "UPDATE dbo.sheets SET azf_code = ?, end_date_time = ?, specs = ?, start_date_time = ?, user_id = ?, status = ? WHERE id = ?;";
+        String query = "UPDATE dbo.sheets SET azf_code = ?, end_date_time = ?, specs = ?, start_date_time = ?, user_id = ?, status = ?, sheet_id = ? WHERE id = ?;";
         log.info("Update database request with id " + request.getId());
         log.info("New value: " + request);
 
@@ -26,6 +26,7 @@ public class RequestDAO {
             updateStatement.setLong(5, request.getUserId());
             updateStatement.setString(6, request.getStatus());
             updateStatement.setLong(7, request.getId());
+            updateStatement.setLong(8, request.getSheetId());
             updateStatement.executeUpdate();
             return selectById(request.getId());
 
@@ -55,6 +56,7 @@ public class RequestDAO {
                 request.setStartDateTime(rs.getTimestamp("start_date_time").toLocalDateTime());
                 request.setUserId(rs.getLong("user_id"));
                 request.setStatus(rs.getString("status"));
+                request.setSheetId(rs.getLong("sheet_id"));
                 return Optional.of(request);
             } else {
                 return Optional.empty();
