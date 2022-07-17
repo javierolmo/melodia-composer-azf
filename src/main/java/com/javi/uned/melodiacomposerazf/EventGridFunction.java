@@ -36,6 +36,7 @@ public class EventGridFunction {
             request = databaseService.selectRequestById(request.getId());
             ScoreSpecsDTO scoreSpecsDTO = request.scoreSpecsDTO();
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
+            executionContext.getLogger().info("Request updated: " + request);
             executionContext.getLogger().info("Score specs: " + scoreSpecsDTO);
 
             // Get sheet object

@@ -9,44 +9,44 @@ import java.time.LocalDateTime;
 
 public class Request implements Serializable {
 
-    private long id;
-    private long userId;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private Long id;
+    private Long userId;
+    private String startDateTime;
+    private String endDateTime;
     private String azfCode;
     private String specs;
     private String status;
-    private long sheetId = -1;
+    private Long sheetId;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
+    public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(LocalDateTime endDateTime) {
+    public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
 
@@ -74,11 +74,11 @@ public class Request implements Serializable {
         this.status = status;
     }
 
-    public long getSheetId() {
+    public Long getSheetId() {
         return sheetId;
     }
 
-    public void setSheetId(long sheetId) {
+    public void setSheetId(Long sheetId) {
         this.sheetId = sheetId;
     }
 
@@ -86,5 +86,17 @@ public class Request implements Serializable {
         return new ObjectMapper().readValue(specs, ScoreSpecsDTO.class);
     }
 
-
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", startDateTime='" + startDateTime + '\'' +
+                ", endDateTime='" + endDateTime + '\'' +
+                ", azfCode='" + azfCode + '\'' +
+                ", specs='" + specs + '\'' +
+                ", status='" + status + '\'' +
+                ", sheetId=" + sheetId +
+                '}';
+    }
 }
