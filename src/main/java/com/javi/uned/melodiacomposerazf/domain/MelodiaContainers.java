@@ -1,4 +1,4 @@
-package com.javi.uned.melodiacomposerazf.adapters.blobstorage;
+package com.javi.uned.melodiacomposerazf.domain;
 
 public enum MelodiaContainers {
     SHEETS;
