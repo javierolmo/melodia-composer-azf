@@ -16,7 +16,7 @@ public class Request implements Serializable {
     private String azfCode;
     private String specs;
     private String status;
-    private long sheetId;
+    private long sheetId = -1;
 
     public long getId() {
         return id;
