@@ -51,9 +51,17 @@ public class RequestDAO {
                 Request request = new Request();
                 request.setId(rs.getLong("id"));
                 request.setAzfCode(rs.getString("azf_code"));
-                request.setEndDateTime(rs.getTimestamp("end_date_time").toLocalDateTime());
+                try {
+                    request.setEndDateTime(rs.getTimestamp("end_date_time").toLocalDateTime());
+                } catch (NullPointerException e) {
+                    request.setEndDateTime(null);
+                }
                 request.setSpecs(rs.getString("specs"));
-                request.setStartDateTime(rs.getTimestamp("start_date_time").toLocalDateTime());
+                try {
+                    request.setStartDateTime(rs.getTimestamp("start_date_time").toLocalDateTime());
+                } catch (NullPointerException e) {
+                    request.setStartDateTime(null);
+                }
                 request.setUserId(rs.getLong("user_id"));
                 request.setStatus(rs.getString("status"));
                 request.setSheetId(rs.getLong("sheet_id"));
