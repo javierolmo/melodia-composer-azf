@@ -1,5 +1,9 @@
 package com.javi.uned.melodiacomposerazf.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Map;
+
 public class Event <T>{
 
     private String id;
@@ -27,8 +31,8 @@ public class Event <T>{
         this.subject = subject;
     }
 
-    public T getData() {
-        return data;
+    public T getData(Class<T> clazz) {
+        return new ObjectMapper().convertValue(data, clazz);
     }
 
     public void setData(T data) {

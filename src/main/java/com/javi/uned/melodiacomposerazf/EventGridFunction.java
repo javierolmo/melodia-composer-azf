@@ -23,14 +23,13 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<String> event,
+            @EventGridTrigger(name = "specs") Event<ScoreSpecsDTO> event,
             final ExecutionContext executionContext
     ) {
-
         executionContext.getLogger().info("Java EventGrid trigger processed a request.");
         executionContext.getLogger().info("Event data: " + event);
-        String scoreSpecsDTOJSON = event.getData();
-        executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTOJSON);
+        ScoreSpecsDTO scoreSpecsDTO = event.getData(ScoreSpecsDTO.class);
+        executionContext.getLogger().info("ScoreSpecsDTO: " + scoreSpecsDTO);
         return "OK";
 
         /*
