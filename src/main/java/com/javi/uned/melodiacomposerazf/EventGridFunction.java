@@ -33,7 +33,7 @@ public class EventGridFunction {
             // Update request from database
             executionContext.getLogger().info("Updating request from database...");
             DatabaseService databaseService = new DatabaseService();
-            request = databaseService.selectRequestById(request.getId());
+            request = databaseService.findRequestById(request.getId());
             ScoreSpecsDTO scoreSpecsDTO = request.scoreSpecsDTO();
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
             executionContext.getLogger().info("Request updated: " + request);

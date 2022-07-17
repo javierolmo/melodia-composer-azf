@@ -49,14 +49,14 @@ public class RequestDAO {
             ResultSet rs = selectStatement.executeQuery();
             if (rs.next()) {
                 Request request = new Request();
-                request.setId(rs.getLong("id"));
+                request.setId((Long) rs.getObject("id"));
                 request.setAzfCode(rs.getString("azf_code"));
                 request.setEndDateTime(rs.getString("end_date_time"));
                 request.setSpecs(rs.getString("specs"));
                 request.setStartDateTime(rs.getString("start_date_time"));
-                request.setUserId(rs.getLong("user_id"));
+                request.setUserId((Long) rs.getObject("user_id"));
                 request.setStatus(rs.getString("status"));
-                request.setSheetId(rs.getLong("sheet_id"));
+                request.setSheetId((Long) rs.getObject("sheet_id"));
                 return Optional.of(request);
             } else {
                 return Optional.empty();

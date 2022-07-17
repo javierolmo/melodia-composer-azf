@@ -31,7 +31,7 @@ public class DatabaseService {
         return sheetDAO.selectById(sheetId).orElseThrow(() -> new SQLException("Sheet not found"));
     }
 
-    public Request selectRequestById(long id) throws SQLException {
+    public Request findRequestById(long id) throws SQLException {
         return requestDAO.selectById(id).orElseThrow(() -> new SQLException("Request not found"));
     }
 }

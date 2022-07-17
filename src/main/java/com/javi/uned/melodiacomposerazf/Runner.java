@@ -11,7 +11,7 @@ public class Runner {
 
     public static void main(String[] args) throws ExportException, BlobStorageException, IOException, SQLException {
         DatabaseService databaseService = new DatabaseService();
-        databaseService.selectRequestById(1);
+        System.out.println(databaseService.findRequestById(1));
     }
 
 }
