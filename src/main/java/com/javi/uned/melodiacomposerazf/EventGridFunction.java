@@ -39,15 +39,14 @@ public class EventGridFunction {
         executionContext.getLogger().info("HttpTrigger processed a request.");
         executionContext.getLogger().info("Request body: " + requestMessage.getBody());
 
-        try {
+        int requestId = Integer.parseInt(requestMessage.getBody());
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            Request request = objectMapper.readValue(requestMessage.getBody(), Request.class);
+        try {
 
             // Update request from database
             executionContext.getLogger().info("Updating request from database...");
             DatabaseService databaseService = new DatabaseService();
-            request = databaseService.findRequestById(request.getId());
+            Request request = databaseService.findRequestById(requestId);
             ScoreSpecsDTO scoreSpecsDTO = request.scoreSpecsDTO();
             ScoreSpecs scoreSpecs = scoreSpecsDTO.toScoreSpecs();
             executionContext.getLogger().info("Request updated: " + request);
