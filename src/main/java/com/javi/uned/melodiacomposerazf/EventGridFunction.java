@@ -1,6 +1,7 @@
 package com.javi.uned.melodiacomposerazf;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.uned.melodiacomposerazf.domain.*;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
@@ -13,8 +14,12 @@ import com.javi.uned.melodiacore.model.MelodiaScore;
 import com.javi.uned.melodiacore.model.specs.ScoreSpecs;
 import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
+import com.microsoft.azure.functions.HttpMethod;
+import com.microsoft.azure.functions.HttpRequestMessage;
+import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
+import com.microsoft.azure.functions.annotation.HttpTrigger;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,14 +30,19 @@ public class EventGridFunction {
 
     @FunctionName("composition-request")
     public String event(
-            @EventGridTrigger(name = "specs") Event<Request> event,
+            @HttpTrigger(
+                    name = "specs",
+                    methods = {HttpMethod.POST},
+                    authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<String> requestMessage,
             final ExecutionContext executionContext
     ) {
-        executionContext.getLogger().info("Java EventGrid trigger processed a request.");
-        executionContext.getLogger().info("Event data: " + event);
-        Request request = event.getData(Request.class);
+        executionContext.getLogger().info("HttpTrigger processed a request.");
+        executionContext.getLogger().info("Request body: " + requestMessage.getBody());
 
         try {
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            Request request = objectMapper.readValue(requestMessage.getBody(), Request.class);
 
             // Update request from database
             executionContext.getLogger().info("Updating request from database...");
