@@ -3,7 +3,7 @@ name: Deploy Java project to Azure Function App
 on:
   push:
     branches:
-      - "master"
+      - "main"
       - "feature/*"
 
 # CONFIGURATION
