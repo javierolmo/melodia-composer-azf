@@ -107,7 +107,7 @@
         <dependency>
             <groupId>com.javi.uned</groupId>
             <artifactId>melodia-core</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
 
         <!-- JAXB Api -->
@@ -289,6 +289,14 @@
                             <directory>obj</directory>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

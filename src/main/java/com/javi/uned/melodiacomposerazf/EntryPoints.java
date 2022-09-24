@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.javi.uned.melodiacomposerazf.domain.*;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
-import com.javi.uned.melodiacomposerazf.services.ComposerService;
+import com.javi.uned.melodiacomposerazf.services.composer.Composer;
 import com.javi.uned.melodiacomposerazf.services.DatabaseService;
 import com.javi.uned.melodiacomposerazf.services.Event;
 import com.javi.uned.melodiacore.exceptions.ExportException;
@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 
-public class EventGridFunction {
+public class EntryPoints {
 
     @FunctionName("composition-request")
-    public String event(
+    public String processCompositionRequest(
             @EventGridTrigger(name = "specs") Event<Request> event,
             final ExecutionContext executionContext
     ) {
@@ -55,8 +55,8 @@ public class EventGridFunction {
 
             // Compose score and save it to a file
             executionContext.getLogger().info("Composing score...");
-            ComposerService composerService = new ComposerService();
-            MelodiaScore melodiaScore = composerService.composeRandom();
+            Composer composer = new Composer();
+            MelodiaScore melodiaScore = composer.compose(scoreSpecs);
             String sourcePath = "scores/generated.musicxml";
             Files.deleteIfExists(new File(sourcePath).toPath());
             MelodiaExporter.toXML(melodiaScore, sourcePath);
