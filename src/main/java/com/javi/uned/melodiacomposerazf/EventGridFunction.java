@@ -5,13 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javi.uned.melodiacomposerazf.domain.*;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
-import com.javi.uned.melodiacomposerazf.services.ComposerService;
 import com.javi.uned.melodiacomposerazf.services.DatabaseService;
-import com.javi.uned.melodiacomposerazf.services.Event;
-import com.javi.uned.melodiacore.exceptions.ExportException;
-import com.javi.uned.melodiacore.io.export.MelodiaExporter;
-import com.javi.uned.melodiacore.model.MelodiaScore;
-import com.javi.uned.melodiacore.model.specs.ScoreSpecs;
 import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
@@ -28,6 +22,7 @@ import java.sql.SQLException;
 
 public class EventGridFunction {
 
+    /*
     @FunctionName("composition-request")
     public String event(
             @HttpTrigger(
@@ -97,7 +92,7 @@ public class EventGridFunction {
             executionContext.getLogger().severe("Error reading/writing file: " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
 
 }

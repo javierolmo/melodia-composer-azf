@@ -52,13 +52,6 @@
             <version>2.0.1</version>
         </dependency>
 
-        <!-- Azure Durable Functions -->
-        <dependency>
-            <groupId>com.microsoft</groupId>
-            <artifactId>durabletask-azure-functions</artifactId>
-            <version>1.0.0-beta.1</version>
-        </dependency>
-
         <!-- Azure Storage -->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -82,13 +75,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Azure Key Vault -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-security-keyvault-secrets</artifactId>
-            <version>4.2.3</version>
-        </dependency>
-
         <!-- Azure Identity -->
         <dependency>
             <groupId>com.azure</groupId>
@@ -107,22 +93,7 @@
         <dependency>
             <groupId>com.javi.uned</groupId>
             <artifactId>melodia-core</artifactId>
-            <version>0.0.4</version>
-        </dependency>
-
-        <!-- JAXB Api -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <!-- JAXB Runtime -->
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.1</version>
-            <scope>runtime</scope>
+            <version>0.1.1</version>
         </dependency>
 
         <!-- Jenetics -->
@@ -132,11 +103,11 @@
             <version>7.0.0</version>
         </dependency>
 
-        <!-- SQLServer JDBC -->
+        <!-- Azure Core -->
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>7.4.1.jre8</version>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-core</artifactId>
+            <version>1.29.1</version>
         </dependency>
 
         <!-- Jackson -->
@@ -149,27 +120,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.13.3</version>
-        </dependency>
-
-        <!-- Azure Event Grid -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventgrid</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-
-        <!-- Azure Core -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-core</artifactId>
-            <version>1.29.1</version>
-        </dependency>
-
-        <!-- Azure Core Serializer JSON Jackson -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-core-serializer-json-jackson</artifactId>
-            <version>1.2.18</version>
         </dependency>
 
     </dependencies>

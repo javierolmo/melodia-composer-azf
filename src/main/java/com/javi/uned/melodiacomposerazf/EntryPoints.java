@@ -4,13 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.javi.uned.melodiacomposerazf.domain.*;
 import com.javi.uned.melodiacomposerazf.exceptions.BlobStorageException;
 import com.javi.uned.melodiacomposerazf.services.BlobStorageService;
-import com.javi.uned.melodiacomposerazf.services.composer.Composer;
 import com.javi.uned.melodiacomposerazf.services.DatabaseService;
 import com.javi.uned.melodiacomposerazf.services.Event;
-import com.javi.uned.melodiacore.exceptions.ExportException;
-import com.javi.uned.melodiacore.io.export.MelodiaExporter;
-import com.javi.uned.melodiacore.model.MelodiaScore;
-import com.javi.uned.melodiacore.model.specs.ScoreSpecs;
 import com.javi.uned.melodiacore.model.specs.ScoreSpecsDTO;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.EventGridTrigger;
@@ -23,6 +18,7 @@ import java.sql.SQLException;
 
 public class EntryPoints {
 
+    /*
     @FunctionName("composition-request")
     public String processCompositionRequest(
             @EventGridTrigger(name = "specs") Event<Request> event,
@@ -88,7 +84,7 @@ public class EntryPoints {
             executionContext.getLogger().severe("Error reading/writing file: " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
 
 }
